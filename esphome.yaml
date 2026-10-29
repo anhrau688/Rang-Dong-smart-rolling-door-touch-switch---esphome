@@ -1,0 +1,101 @@
+# Board: Generic - BK7231N (Tuya QFN32)
+# Definition: definitions/boards/generic-bk7231n-qfn32-tuya/manifest.yaml
+
+esphome:
+  name: cua-cuon-rang-dong
+  friendly_name: cua cuon rang dong
+
+bk72xx:
+  board: generic-bk7231n-qfn32-tuya
+
+logger:
+
+api:
+  encryption:
+    key: "+TJB59xSu461DVj8Ns0vW6CuvlMOaVaeTrXYgLe8z2c="
+
+ota:
+  - platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: cua cuon rang d Fallback Hotspot
+    password: "12345678"
+  reboot_timeout: 0s
+
+captive_portal:
+
+################### CPU CONFIGS ####################  
+text_sensor:
+  - platform: uptime
+    name: "Uptime"
+    
+  - platform: wifi_info
+    ssid:
+      name: "WiFi SSID"
+      icon: mdi:wifi-sync
+
+  - platform: wifi_info
+    ip_address:
+      name: "IP Address"
+      icon: mdi:ip-network-outline
+
+  - platform: wifi_info
+    bssid:
+      name: "BSSID"  
+      icon: mdi:wifi-marker
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 60s
+   
+  - platform: internal_temperature  
+    name: "CPU Temp"
+
+button:
+  - platform: restart
+    name: "Restart"
+    icon: mdi:restart
+    
+  - platform: factory_reset
+    name: "Factory Reset (Eraser All Data)"  
+
+#=============UART======================#  
+uart:
+  tx_pin: P11
+  rx_pin: P10
+  baud_rate: 9600  
+
+tuya:  
+cover:
+  - platform: tuya
+    name: "Cửa cuốn"
+    device_class: garage
+    position_datapoint: 2  
+    control_datapoint: 1
+
+number:
+- platform: tuya
+  name: "Quick Calibration"
+  number_datapoint: 5
+  icon: mdi:timer-refresh-outline
+  entity_category: config
+  min_value: 0
+  max_value: 900
+  step: 1  
+    
+select:
+  - platform: tuya
+    name: "Lock touchpad"
+    enum_datapoint: 101
+    entity_category: config
+    icon: mdi:account-lock
+    optimistic: true
+    options:
+      0: Unlock
+      1: Lock  
+
+
